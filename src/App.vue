@@ -1,5 +1,5 @@
 <script setup>
-import {ref, onMounted, computed} from 'vue'
+import {ref, onMounted} from 'vue'
 import {supabase} from './supabase'
 
 import ChartComponent from './components/ChartComponent.vue'
@@ -27,15 +27,6 @@ const formatDate = (dateStr) => {
     return `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")} ${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
 }
 
-const highestCoverage = computed(() => {
-    if (coverageList.value.length === 0) {
-        return 0
-    }
-
-    return Math.max(...coverageList.value.map((item) => item.code_coverage))
-})
-
-
 </script>
 <template>
 
@@ -44,13 +35,6 @@ const highestCoverage = computed(() => {
     <br>
 
     <div>
-        <div class="top-section">
-            <p>The highest code coverage value is: {{ highestCoverage }}</p>
-        </div>
-
-        <div class="container">
-            <Bar v-if="loaded" :data="chartData"/>
-        </div>
 
         <table>
             <thead>

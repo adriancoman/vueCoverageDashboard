@@ -1,16 +1,21 @@
 <script setup>
 import Chart from 'chart.js/auto';
-import {onMounted, ref} from 'vue'
+import {reactive, onMounted, ref} from 'vue'
 import {supabase} from '@/supabase'
 
 const coverageList = ref([])
 const selectedRange = ref("all")
 const dataType = ref("coverage")
 
+const state = reactive({
+    trend: "",
+    maxValue: 0,
+    lastValueOfSet: 0,
+});
+
 async function getCoverage() {
     const {data} = await supabase.from('codecoverage').select()
     coverageList.value = data
-    console.log("got data")
     drawChart()
 }
 
@@ -59,8 +64,15 @@ function drawChart() {
         return items.reduce((max, item) => Math.max(max, item.code_coverage), 0)
     })
 
+    if (coverageList.value.length === 0) {
+        return 0
+    }
+
     let toDisplayData
     let yAxisLabel
+
+    let maxValues
+
     if (dataType.value === "coverage") {
         toDisplayData = {
             label: 'Code coverage',
@@ -75,6 +87,22 @@ function drawChart() {
             backgroundColor: '#2e9d47',
         }
         yAxisLabel = "Code coverage (%)"
+
+        // get the max value of the period
+        maxValues = Math.max(...codeCoverageList)
+
+        // calculate the trend
+        let firstValue = codeCoverageList[0]
+        let lastValue = codeCoverageList[codeCoverageList.length-1]
+        let delta = Number(lastValue - firstValue).toFixed(2)
+        if (delta > 0) {
+            state.trend = "+" + delta + "% 👍"
+        } else {
+            state.trend = "-" + delta + "% 👎"
+        }
+
+        // get the last value
+        state.lastValueOfSet = lastValue
     } else {
         toDisplayData = {
             label: 'Unit tests',
@@ -89,7 +117,24 @@ function drawChart() {
             backgroundColor: '#FFB1C1',
         }
         yAxisLabel = "Unit tests (#)"
+
+        // get the max value of the period
+        maxValues = Math.max(...testCountList)
+
+        // calculate the trend
+        let firstValue = testCountList[0]
+        let lastValue = testCountList[testCountList.length-1]
+        let delta = lastValue - firstValue
+        if (delta > 0) {
+            state.trend = "+" + delta + " 👍"
+        } else {
+            state.trend = "-" + delta + " 👎"
+        }
+
+        // get the last value
+        state.lastValueOfSet = lastValue
     }
+    state.maxValue = maxValues
 
     const ctx = document.getElementById('myChart');
     const config = {
@@ -206,5 +251,21 @@ onMounted(() => {
         <div class="chart">
             <canvas id="myChart"></canvas>
         </div>
+
+        <div class="card-columns">
+            <div class="card">
+                <div class="card-title">Trend</div>
+                <div class="card-value">{{ state.trend }}</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Max</div>
+                <div class="card-value">{{ state.maxValue }}</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Last value</div>
+                <div class="card-value">{{ state.lastValueOfSet }}</div>
+            </div>
+        </div>
+
     </div>
 </template>
