@@ -1,0 +1,88 @@
+@import './base.css';
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  font-weight: normal;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    place-items: center;
+  }
+
+  #app {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0 2rem;
+  }
+}
+
+.coverage-chart {
+  width: 100%;
+  box-sizing: border-box; /* optional, include if you want padding/border to be included in width */
+}
+
+.date-range {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+button {
+  background: #2F2F2FFF;
+  color: white;
+  border: none;
+  padding: 10px;
+  transition: all 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.first-button {
+  background: #2f2f2f;
+  border-radius: 10px 0 0 10px;
+}
+
+.last-button {
+  background: #2F2F2FFF;
+  border-radius: 0 10px 10px 0;
+}
+
+.active {
+  background: linear-gradient(to bottom left, #3ED85E, #2CC84D, #3ED85E);
+  color: black;
+}
+.active-first {
+  background: linear-gradient(to bottom left, #3ED85E, #2CC84D, #3ED85E);
+  color: black;
+}
+.active-last {
+  background: linear-gradient(to bottom left, #3ED85E, #2CC84D, #3ED85E);
+  color: black;
+}
+
+.selected-range {
+  font-size: 24px;
+  font-weight: bold;
+}
