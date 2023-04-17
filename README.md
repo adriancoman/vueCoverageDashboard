@@ -2,7 +2,7 @@
 
 Small over-the-weekend project that I created in order to display a history of code-coverage and unit tests.
 
-<img width="647" alt="Screenshot 2023-04-17 at 15 38 41" src="https://user-images.githubusercontent.com/4348190/232489884-bd9e2d6b-7283-4f52-8d3b-79921778e437.png">
+<img width="623" alt="Screenshot 2023-04-17 at 16 02 41" src="https://user-images.githubusercontent.com/4348190/232492041-2f09bb7a-2995-4bcb-8d99-c06a41786027.png">
 
 ## Tech stack used
 ### Tech in this repo:
