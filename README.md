@@ -38,5 +38,11 @@ The DB will return the following type of that:
   { created_at: '2023-04-17T13:50:45.632605+00:00', code_coverage: 13.2, test_count: 103, author: 'Sushi', pull_request: `pull/241` }]
 ```
 
+## Next steps:
+1. Add a CI/CD pipeline
+2. Change the structure of the DB so that it will support multiple projects
+3. Update the UI as it looks bad (going to look into a template)
+4. Open-source the CI/CD pipeline that we're using for the mobile projects
+
 <br> 
-_Disclaimer if you can't tell from the code:_ I have 0 experience in Vue. I'm an Android developer, with experience in Kotlin :)
+<em>Disclaimer if you can't tell from the code:</em> I have 0 experience in Vue. I'm an Android developer, with experience in Kotlin :)
