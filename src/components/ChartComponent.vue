@@ -1,6 +1,6 @@
 <script setup>
 import Chart from 'chart.js/auto';
-import {reactive, onMounted, ref} from 'vue'
+import {reactive, onMounted, ref, defineEmits } from 'vue'
 import {supabase} from '@/supabase'
 
 const coverageList = ref([])
@@ -17,6 +17,8 @@ const repoListState = reactive({
     list: [],
     selectedItem: "all"
 })
+
+const emit = defineEmits(['selected-repo']);
 
 async function getCoverage() {
     const {data} = await supabase.from('codecoverage').select()
@@ -265,45 +267,53 @@ onMounted(() => {
 })
 
 function onChange() {
-    console.log(repoListState.selectedItem)
     getCoverage()
+    console.log(repoListState.selectedItem)
+    if (repoListState.selectedItem === "all") {
+        emit('selected-repo', "all");
+    } else {
+        emit('selected-repo', repoListState.selectedItem.id);
+    }
 }
 
 </script>
 
-
 <template>
     <div class="coverage-chart">
-        <div class="date-range">
-            <div class="buttons">
-                <button :class="{ 'active-first': selectedRange === 'week' }" class="first-button"
-                        @click="selectRange('week')">7 days
-                </button>
-                <button :class="{ active: selectedRange === 'month' }" @click="selectRange('month')">30 days</button>
-                <button :class="{ active: selectedRange === '3month' }" @click="selectRange('3month')">3 months</button>
-                <button :class="{ 'active-last': selectedRange === 'all' }" class="last-button"
-                        @click="selectRange('all')">All
-                </button>
-            </div>
-        </div>
+        <div class="card-columns">
+            <div class="date-range">
 
-        <div class="date-range">
-            <div class="buttons">
-                <button :class="{ 'active-first': dataType === 'coverage' }" class="first-button"
-                        @click="selectCount('coverage')">Test coverage
-                </button>
-                <button :class="{ 'active-last': dataType === 'count' }" class="last-button"
-                        @click="selectCount('count')">Test count
-                </button>
+                <div class="buttons">
+                    <button :class="{ 'active-first': selectedRange === 'week' }" class="first-button"
+                            @click="selectRange('week')">7 days
+                    </button>
+                    <button :class="{ active: selectedRange === 'month' }" @click="selectRange('month')">30 days</button>
+                    <button :class="{ active: selectedRange === '3month' }" @click="selectRange('3month')">3 months</button>
+                    <button :class="{ 'active-last': selectedRange === 'all' }" class="last-button"
+                            @click="selectRange('all')">All
+                    </button>
+                </div>
             </div>
-        </div>
-        <div>
-            <select class="dropdown" v-model="repoListState.selectedItem" @change="onChange()">
-                <option value="all" selected>All repos</option>
-                <option v-for="item in repoListState.list" :key="item.id" :value="item">{{ item.name }}</option>
-            </select>
-        </div>
 
+            <div class="date-range">
+                <div class="buttons">
+                    <button :class="{ 'active-first': dataType === 'coverage' }" class="first-button"
+                            @click="selectCount('coverage')">Test coverage
+                    </button>
+                    <button :class="{ 'active-last': dataType === 'count' }" class="last-button"
+                            @click="selectCount('count')">Test count
+                    </button>
+                </div>
+            </div>
+            <div>
+                <select class="dropdown" v-model="repoListState.selectedItem" @change="onChange()">
+                    <option value="all" selected>All repos</option>
+                    <option v-for="item in repoListState.list" :key="item.id" :value="item">{{ item.name }}</option>
+                </select>
+            </div>
+
+        </div>
+        <h2>Charted data:</h2>
         <div class="chart">
             <canvas id="myChart"></canvas>
         </div>

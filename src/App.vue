@@ -4,16 +4,32 @@ import {supabase} from './supabase'
 
 import ChartComponent from './components/ChartComponent.vue'
 
+const completeList = ref([])
 const coverageList = ref([])
 
 async function getCoverage() {
     const {data} = await supabase.from('codecoverage').select()
+    data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    completeList.value = data
+
     coverageList.value = data
 }
 
 onMounted(() => {
     getCoverage()
 })
+
+const handleUpdateValue = (selectedRepoValue) => {
+    console.log('Repo selected from ChartComponent:', selectedRepoValue);
+
+    let filteredList
+    if (selectedRepoValue === "all") {
+        filteredList = completeList
+    } else {
+        filteredList = completeList.value.filter(item => item.project === selectedRepoValue)
+    }
+    coverageList.value = filteredList
+};
 
 const formatDate = (dateStr) => {
     const dateObj = new Date(dateStr)
@@ -30,12 +46,11 @@ const formatDate = (dateStr) => {
 </script>
 <template>
 
-    <ChartComponent/>
-
+    <ChartComponent @selected-repo="handleUpdateValue" />
     <br>
-
+    <h2>Pull requests:</h2>
+    <br>
     <div>
-
         <table>
             <thead>
             <tr>
