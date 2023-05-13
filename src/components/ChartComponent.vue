@@ -117,6 +117,7 @@ function drawChart() {
     let yAxisLabel
 
     let maxValues
+    let delta
 
     if (dataType.value === "coverage") {
         toDisplayData = {
@@ -139,12 +140,7 @@ function drawChart() {
         // calculate the trend
         let firstValue = codeCoverageList[0]
         let lastValue = codeCoverageList[codeCoverageList.length-1]
-        let delta = Number(lastValue - firstValue).toFixed(2)
-        if (delta > 0) {
-            state.trend = "+" + delta + "% 👍"
-        } else {
-            state.trend = "-" + delta + "% 👎"
-        }
+        delta = Number(lastValue - firstValue).toFixed(2)
 
         // get the last value
         state.lastValueOfSet = lastValue
@@ -169,16 +165,24 @@ function drawChart() {
         // calculate the trend
         let firstValue = testCountList[0]
         let lastValue = testCountList[testCountList.length-1]
-        let delta = lastValue - firstValue
-        if (delta > 0) {
-            state.trend = "+" + delta + " 👍"
-        } else {
-            state.trend = "-" + delta + " 👎"
-        }
+        delta = lastValue - firstValue
 
         // get the last value
         state.lastValueOfSet = lastValue
     }
+
+    // trend
+    if (isNaN(delta)) {
+        state.trend = "🤷";
+    } else if (delta > 0) {
+        state.trend = "+" + delta + "% 👍";
+    } else if (delta < 0) {
+        state.trend = delta + "% 👎";
+    } else {
+        state.trend = "0 😓";
+    }
+
+    // max value
     state.maxValue = maxValues
 
     const ctx = document.getElementById('myChart');
