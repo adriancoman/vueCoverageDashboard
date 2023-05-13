@@ -43,7 +43,7 @@ The DB will return the following type of that:
 
 ## Next steps:
 1. Add a CI/CD pipeline
-2. Change the structure of the DB so that it will support multiple projects
+2. ~Change the structure of the DB so that it will support multiple projects~
 3. Update the UI as it looks bad (going to look into a template)
 4. Open-source the CI/CD pipeline that we're using for the mobile projects
 
