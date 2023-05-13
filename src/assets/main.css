@@ -115,3 +115,43 @@ button {
 .card-value {
   font-size: 24px;
 }
+.dropdown {
+  font-family: "Arial", sans-serif;
+  font-size: 16px;
+  padding: 8px 12px;
+  border: 2px solid #2F2F2F;
+  border-radius: 10px;
+  background-color: #2F2F2F;
+  color: white;
+  appearance: none; /* Remove the default appearance */
+  -webkit-appearance: none; /* Safari and Chrome */
+  -moz-appearance: none; /* Firefox */
+  cursor: pointer;
+}
+
+.dropdown:hover {
+  border-color: #3ED85E;
+  background-color: #3ED85E;
+  color: black;
+}
+
+.dropdown:focus {
+  outline: none;
+  border-color: #3ED85E;
+  background-color: #3ED85E;
+  color: black;
+}
+
+/* Add a custom arrow for the dropdown */
+.dropdown::-ms-expand {
+  display: none;
+}
+
+.dropdown::after {
+  content: "▼";
+  position: absolute;
+  right: 12px;
+  top: calc(50% - 4px);
+  pointer-events: none;
+  color: white;
+}

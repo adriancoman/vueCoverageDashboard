@@ -13,11 +13,45 @@ const state = reactive({
     lastValueOfSet: 0,
 });
 
+const repoListState = reactive({
+    list: [],
+    selectedItem: "all"
+})
+
 async function getCoverage() {
     const {data} = await supabase.from('codecoverage').select()
     coverageList.value = data
+    displayAvailableRepos()
     drawChart()
 }
+
+function displayAvailableRepos() {
+    repoListState.list = []
+    let repoList = []
+
+    // get all the available repos
+    for (let i = 0; i < coverageList.value.length; i++) {
+        let item = coverageList.value[i]
+        if (item.project != null) {
+            repoList.push(item.project)
+        }
+    }
+
+    // filter non-unique values
+    const uniqueList = repoList.filter((value, index, self) => {
+        return self.indexOf(value) === index;
+    });
+
+    // create the list to be displayed
+    for (let i = 0; i < uniqueList.length; i++) {
+        let item = uniqueList[i]
+        repoListState.list.push({
+            id: item,
+            name: item
+        })
+    }
+}
+
 
 function drawChart() {
 
@@ -37,13 +71,22 @@ function drawChart() {
             const threeMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 3, today.getDate())
             filteredList = coverageList.value.filter(item => new Date(item.created_at) >= threeMonthsAgo)
             break
-        default:
+        case 'all':
             filteredList = coverageList.value
             break
+        default:
+            throw "Unknown range"
     }
+
+    // filter the correct repo
+    if (repoListState.selectedItem !== "all") {
+        filteredList = filteredList.filter(item => item.project === repoListState.selectedItem.id)
+    }
+
+    // sort by date
     filteredList.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
 
-    //create dates
+    // create dates
     const dateMap = filteredList.reduce((acc, item) => {
         const date = new Date(item.created_at).toLocaleDateString('en-GB', {day: 'numeric', month: 'short'})
         if (!acc[date]) {
@@ -221,6 +264,11 @@ onMounted(() => {
     getCoverage()
 })
 
+function onChange() {
+    console.log(repoListState.selectedItem)
+    getCoverage()
+}
+
 </script>
 
 
@@ -238,6 +286,7 @@ onMounted(() => {
                 </button>
             </div>
         </div>
+
         <div class="date-range">
             <div class="buttons">
                 <button :class="{ 'active-first': dataType === 'coverage' }" class="first-button"
@@ -248,6 +297,13 @@ onMounted(() => {
                 </button>
             </div>
         </div>
+        <div>
+            <select class="dropdown" v-model="repoListState.selectedItem" @change="onChange()">
+                <option value="all" selected>All repos</option>
+                <option v-for="item in repoListState.list" :key="item.id" :value="item">{{ item.name }}</option>
+            </select>
+        </div>
+
         <div class="chart">
             <canvas id="myChart"></canvas>
         </div>
