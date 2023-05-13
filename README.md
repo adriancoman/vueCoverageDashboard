@@ -4,7 +4,7 @@ Small over-the-weekend project that I created in order to display a history of c
 
 | Code coverage  | Test count |
 | ------------- | ------------- |
-| <img width="906" alt="Screenshot 2023-04-17 at 18 09 15" src="https://user-images.githubusercontent.com/4348190/232528776-7d18180d-f5d8-4554-8f38-37353923334f.png">  | <img width="889" alt="Screenshot 2023-04-17 at 18 08 09" src="https://user-images.githubusercontent.com/4348190/232528864-288d1e69-4b48-44a5-825f-8ce5e6f752d8.png">  |
+| <img width="906" alt="Screenshot 2023-04-17 at 18 09 15" src="https://github.com/adriancoman/vueCoverageDashboard/assets/4348190/135d26aa-d828-4c2f-b30a-2ade7fddb0ba">  | <img width="906" alt="Screenshot 2023-04-17 at 18 08 09" src="https://github.com/adriancoman/vueCoverageDashboard/assets/4348190/00142b29-3694-464e-b917-08aad7a9e882">  |
 
 
 ## Tech stack used
